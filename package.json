@@ -1,0 +1,24 @@
+{
+  "name": "lewbot",
+  "version": "1.0.0",
+  "description": "My first Twitch bot",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "tmi.js": "^1.1.2"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lewis-Allen/LewBot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Lewis-Allen/LewBot/issues"
+  },
+  "homepage": "https://github.com/Lewis-Allen/LewBot#readme"
+}
