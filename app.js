@@ -1,5 +1,6 @@
 var tmi = require('tmi.js');
-var env = require('dotenv/config')
+var env = require('dotenv/config');
+var count = require('./counting/counts.js');
 
 var channel = process.env.CHANNEL;
 
@@ -35,6 +36,7 @@ client.on("disconnected", function(reason) {
    console.log("Disconnected due to: \n" + reason); 
 });
 
+// Subscriptions
 client.on("subscription", function(channel, username, method){
     client.say("Thankyou for subscribing " + username + "!");
 });
@@ -43,6 +45,24 @@ client.on("subscription", function(channel, username, method){
 client.on("chat", function(channel, user, message, self) {
     if(self)
         return;
+    
+    count.increase('Messages');
+    
+    if(message.includes("Kappa") && message !== "!Kappa"){
+        count.increase('Kappa');
+    }
+    
+    if(message.includes("SMOrc") && message !== "!SMOrc"){
+        count.increase('SMOrc');
+    }
+    
+    if(message === "!Kappa"){
+        client.say(channel, count.get('Kappa') + " Kappa");
+    }
+    
+    if(message === "!SMOrc"){
+        client.say(channel, count.get('SMOrc') + " SMOrc");
+    }
     
     if(message === "!twitter"){
         client.say(channel,"I don't have a Twitter lol");
@@ -56,8 +76,26 @@ client.on("chat", function(channel, user, message, self) {
         client.say(channel,"The code can be found on my GitHub at - ");
     }
     
+    if(message === "!messages"){
+        client.say(channel, "Total messages: " + count.get('Messages'));
+    }
+    
     // Mod commands
     if (user.mod) {
+        
+        if(message.substr(0,6) === "!reset"){
+            var name = message.trim().split(" ");
+            if(name.length != 2) {
+                client.say(channel, "!reset <count>");
+                return;
+            }   
+            
+            if(count.reset(name[1].trim())){ 
+                client.say(channel, "Counts reset");
+            } else {
+                client.say(channel, "Count for " + name[1] + " doesn't exist");
+            }
+        }
         
         if(message.substr(0,4) === ("!mod")){ 
             var name = message.trim().split(" ");
